@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <!-- 로그 경로 변수 선언 -->
+    <property name="LOG_DIR" value="src/main/resources" />
+    <property name="LOG_PATH_NAME" value="${LOG_DIR}/board_log_khd.log" />
+
+    <!-- FILE Appender -->
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">\
+        <!-- 파일 경로 -->
+        <file>${LOG_PATH_NAME}</file>
+        <!-- Rolling 정책 , TimeBasedRollingPolicy 에 따라 오늘이 지나거나 용량이 넘어서면 파일이 분리된다 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- .gz,.zip 등을 넣으면 자동으로 일자별 로그파일 압축 -->
+            <fileNamePattern>${LOG_PATH_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!-- 일자별 로그파일 최대 보관주기(일단위) , 만약 해당 설정일 이상된 파일은 자동으로 제거-->
+            <maxHistory>60</maxHistory>
+            <!-- 파일당 최고 용량 10MB -->
+            <!-- <maxFileSize>10MB</maxFileSize> -->
+        </rollingPolicy>
+        <!-- 출력패턴 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level --- [%thread] %logger{35} : %msg %n</pattern>     <!-- 로그 패턴 지정 -->
+        </encoder>
+    </appender>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level --- [%thread] %logger{35} : %msg %n</pattern>     <!-- 로그 패턴 지정 -->
+        </encoder>
+    </appender>
+
+    <!-- TRACE > DEBUG > INFO > WARN > ERROR, 대소문자 구분 안함 -->
+    <!-- profile 을 읽어서 appender 을 설정할수 있음 -->
+    <!-- logger 는 상속 구조를 가진다. 패키지 별로 level 을 다르게 가질 수 있음 -->
+    <springProfile name="local">
+        <root level="INFO">
+            <appender-ref ref="consoleAppender" />
+        </root>
+        <logger name="com.rubypaper" level="INFO" additivity="false" >
+            <appender-ref ref="fileAppender" />
+            <appender-ref ref="consoleAppender" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="real">
+        <root level="WARN">
+            <appender-ref ref="consoleAppender" />
+        </root>
+        <logger name="com.rubypaper" level="WARN" additivity="false" >
+            <appender-ref ref="fileAppender" />
+            <appender-ref ref="consoleAppender" />
+        </logger>
+    </springProfile>
+
+</configuration>
