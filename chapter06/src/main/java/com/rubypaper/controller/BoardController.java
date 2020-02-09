@@ -71,4 +71,9 @@ public class BoardController {
         return "redirect:getBoardList";
     }
 
+    @GetMapping("hello")
+    public void hello(Model model) {
+        model.addAttribute("greeting", "Hello Thymeleaf ~");
+    }
+
 }
