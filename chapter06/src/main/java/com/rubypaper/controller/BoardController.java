@@ -26,6 +26,7 @@ public class BoardController {
     // 해당 컨트롤러로 접근하려는 모든 요청에 @ModelAttribute 가 붙은 메서드의 리턴 값을, 설정된 모델명으로 자동 포함해주는 역할을 담당해준다.
     // 해당 컨트롤러로 클라이언트가 접근할 때, 반드시 @ModelAttribute 가 붙은 메서드의 리턴 값을 보장받는다.
     // 때문에, 아래의 Expected session attribute 'member' 에러 발생을 막는다.
+    // 세션 초기화 코드 !!!
     @ModelAttribute("member")
     public Member setMember() {
         return new Member();
